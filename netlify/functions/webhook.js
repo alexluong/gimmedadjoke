@@ -12,6 +12,10 @@ function createCrcResponseToken(crcToken) {
 function getHandler(event, context, callback) {
   const crcToken = event.queryStringParameters.crc_token;
 
+  console.log(crc_token);
+  console.log(process.env.TWITTER_CONSUMER_SECRET);
+  console.log(createCrcResponseToken(crcToken));
+
   if (crcToken) {
     callback(null, {
       statusCode: 200,
@@ -30,8 +34,10 @@ function getHandler(event, context, callback) {
 }
 
 function postHandler(event, context, callback) {
-  const body = JSON.parse(event.body);
-  console.log(body);
+  console.log(event.body);
+  // const body = JSON.parse(event.body);
+  // console.log(body);
+  console.log("hello");
   callback(null, { statusCode: 200 });
 }
 
