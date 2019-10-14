@@ -30,11 +30,9 @@ function getHandler(event, context, callback) {
 }
 
 function postHandler(event, context, callback) {
-  console.log(event.body);
-  // const body = JSON.parse(event.body);
-  // console.log(body);
-  console.log("hello");
-  callback(null, { statusCode: 200 });
+  const body = JSON.parse(event.body);
+  console.log(body);
+  callback(null, { statusCode: 200, body: JSON.stringify(body) });
 }
 
 exports.handler = (event, context, callback) => {
