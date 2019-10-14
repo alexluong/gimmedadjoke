@@ -3,10 +3,15 @@
   "version": "1.0.0",
   "license": "MIT",
   "scripts": {
-    "start": "netlify-lambda serve functions",
+    "start": "dotenv -e .env netlify-lambda serve functions",
     "build": "netlify-lambda build functions"
   },
   "dependencies": {
-    "netlify-lambda": "^1.6.3"
+    "netlify-lambda": "^1.6.3",
+    "request": "^2.88.0",
+    "request-promise": "^4.2.4"
+  },
+  "devDependencies": {
+    "dotenv-cli": "^3.0.0"
   }
 }
