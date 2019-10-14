@@ -49,7 +49,7 @@ exports.handler = (event, context, callback) => {
         });
     }
   } catch (error) {
-    console.log(e.message);
+    console.log(error.message);
     callback(error, { statusCode: 500 });
   }
 };
