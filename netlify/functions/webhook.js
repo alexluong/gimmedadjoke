@@ -12,10 +12,6 @@ function createCrcResponseToken(crcToken) {
 function getHandler(event, context, callback) {
   const crcToken = event.queryStringParameters.crc_token;
 
-  console.log(crcToken);
-  console.log(process.env.TWITTER_CONSUMER_SECRET);
-  console.log(createCrcResponseToken(crcToken));
-
   if (crcToken) {
     callback(null, {
       statusCode: 200,
