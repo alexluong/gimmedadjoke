@@ -1,0 +1,4 @@
+[build]
+  base = "netlify"
+  command = "yarn build"
+  functions = "build"
