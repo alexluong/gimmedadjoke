@@ -1,4 +1,9 @@
 const crypto = require("crypto");
+const request = require("request-promise");
+
+const TWITTER_URL = "https://api.twitter.com/1.1";
+const TWITTER_USERNAME = "@gimmedadjoke";
+const GITHUB_URL = "https://github.com/alexluong/gimmedadjoke";
 
 function createCrcResponseToken(crcToken) {
   const hmac = crypto
@@ -31,7 +36,47 @@ function getHandler(event, context, callback) {
 
 function postHandler(event, context, callback) {
   const body = JSON.parse(event.body);
-  console.log(body);
+
+  // If not a tweet event, we're not doing anything
+  if (!body.tweet_create_events) {
+    callback(null, { statusCode: 200 });
+  }
+
+  const tweet = body.tweet_create_events[0];
+
+  // Check if we're mentioned
+  if (tweet.text.toLowercase().includes(TWITTER_USERNAME)) {
+    // Fetch a dad joke
+    request
+      .get({
+        url: "https://icanhazdadjoke.com",
+        headers: {
+          Accept: "text/plain",
+          "User-Agent": `${TWITTER_USERNAME} (${GITHUB_URL})`
+        }
+      })
+      .then(joke => {
+        // Reply to the tweet
+        request.post({
+          url: `${TWITTER_URL}/statuses/update.json`,
+          oauth: {
+            consumer_key: process.env.TWITTER_CONSUMER_TOKEN,
+            consumer_secret: process.env.TWITTER_CONSUMER_SECRET,
+            token: process.env.TWITTER_ACCESS_TOKEN,
+            token_secret: process.env.TWITTER_ACCESS_TOKEN_SECRET
+          },
+          headers: {
+            "Content-Type": "application/json"
+          },
+          form: {
+            status: joke,
+            in_reply_to_status_id: tweet.id_str,
+            auto_populate_reply_metadata: true
+          }
+        });
+      });
+  }
+
   callback(null, { statusCode: 200, body: JSON.stringify(body) });
 }
 
