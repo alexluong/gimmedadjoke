@@ -40,6 +40,7 @@ function postHandler(event, context, callback) {
   // If not a tweet event, we're not doing anything
   if (!body.tweet_create_events) {
     callback(null, { statusCode: 200 });
+    return;
   }
 
   const tweet = body.tweet_create_events[0];
