@@ -45,7 +45,7 @@ function postHandler(event, context, callback) {
   const tweet = body.tweet_create_events[0];
 
   // Check if we're mentioned
-  if (tweet.text.toLowercase().includes(TWITTER_USERNAME)) {
+  if (tweet.text.toLowerCase().includes(TWITTER_USERNAME)) {
     // Fetch a dad joke
     request
       .get({
