@@ -1,7 +1,7 @@
 const crypto = require("crypto");
 const request = require("request-promise");
 
-const TWITTER_URL = "https://api.twitter.com/1.1";
+const TWITTER_API = "https://api.twitter.com/1.1";
 const TWITTER_USERNAME = "@gimmedadjoke";
 const GITHUB_URL = "https://github.com/alexluong/gimmedadjoke";
 
@@ -59,15 +59,12 @@ function postHandler(event, context, callback) {
         // Reply to the tweet
         request
           .post({
-            url: `${TWITTER_URL}/statuses/update.json`,
+            url: `${TWITTER_API}/statuses/update.json`,
             oauth: {
-              consumer_key: process.env.TWITTER_CONSUMER_TOKEN,
+              consumer_key: process.env.TWITTER_CONSUMER_KEY,
               consumer_secret: process.env.TWITTER_CONSUMER_SECRET,
               token: process.env.TWITTER_ACCESS_TOKEN,
               token_secret: process.env.TWITTER_ACCESS_TOKEN_SECRET
-            },
-            headers: {
-              "Content-Type": "application/json"
             },
             form: {
               status: joke,
