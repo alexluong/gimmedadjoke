@@ -59,7 +59,7 @@ exports.deleteWebhook = function(webhookId) {
 
 exports.getSubscription = function() {
   return request.get({
-    url: `${TWITTER_API_URL}/account_activity/all/${this.webhookEnv}/subscriptions.json`,
+    url: `${TWITTER_API_URL}/account_activity/all/${TWITTER_WEBHOOK_ENV}/subscriptions.json`,
     oauth,
     json: true
   });
@@ -67,7 +67,7 @@ exports.getSubscription = function() {
 
 exports.createSubscription = function() {
   return request.post({
-    url: `${TWITTER_API_URL}/account_activity/all/${this.webhookEnv}/subscriptions.json`,
+    url: `${TWITTER_API_URL}/account_activity/all/${TWITTER_WEBHOOK_ENV}/subscriptions.json`,
     oauth,
     json: true
   });
@@ -75,7 +75,7 @@ exports.createSubscription = function() {
 
 exports.deleteSubscription = function(userId) {
   return request.delete({
-    url: `${TWITTER_API_URL}/account_activity/all/${this.webhookEnv}/subscriptions/${userId}.json`,
+    url: `${TWITTER_API_URL}/account_activity/all/${TWITTER_WEBHOOK_ENV}/subscriptions/${userId}.json`,
     headers: authorizationHeaders,
     json: true
   });
