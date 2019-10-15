@@ -57,27 +57,35 @@ function postHandler(event, context, callback) {
       })
       .then(joke => {
         // Reply to the tweet
-        request.post({
-          url: `${TWITTER_URL}/statuses/update.json`,
-          oauth: {
-            consumer_key: process.env.TWITTER_CONSUMER_TOKEN,
-            consumer_secret: process.env.TWITTER_CONSUMER_SECRET,
-            token: process.env.TWITTER_ACCESS_TOKEN,
-            token_secret: process.env.TWITTER_ACCESS_TOKEN_SECRET
-          },
-          headers: {
-            "Content-Type": "application/json"
-          },
-          form: {
-            status: joke,
-            in_reply_to_status_id: tweet.id_str,
-            auto_populate_reply_metadata: true
-          }
-        });
+        request
+          .post({
+            url: `${TWITTER_URL}/statuses/update.json`,
+            oauth: {
+              consumer_key: process.env.TWITTER_CONSUMER_TOKEN,
+              consumer_secret: process.env.TWITTER_CONSUMER_SECRET,
+              token: process.env.TWITTER_ACCESS_TOKEN,
+              token_secret: process.env.TWITTER_ACCESS_TOKEN_SECRET
+            },
+            headers: {
+              "Content-Type": "application/json"
+            },
+            form: {
+              status: joke,
+              in_reply_to_status_id: tweet.id_str,
+              auto_populate_reply_metadata: true
+            }
+          })
+          .then(response => {
+            console.log("Tweeted");
+            console.log(response);
+            callback(null, { statusCode: 200 });
+          })
+          .catch(error => {
+            console.log(error);
+            callback(null, { statusCode: 200 });
+          });
       });
   }
-
-  callback(null, { statusCode: 200, body: JSON.stringify(body) });
 }
 
 exports.handler = (event, context, callback) => {
