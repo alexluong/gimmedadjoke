@@ -67,7 +67,7 @@ function postHandler(event, context, callback) {
               token_secret: process.env.TWITTER_ACCESS_TOKEN_SECRET
             },
             form: {
-              status: joke,
+              status: `${joke}\n#dadjoke`,
               in_reply_to_status_id: tweet.id_str,
               auto_populate_reply_metadata: true
             }
