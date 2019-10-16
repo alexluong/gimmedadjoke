@@ -14,32 +14,26 @@ function createCrcResponseToken(crcToken) {
   return `sha256=${hmac}`;
 }
 
-function getHandler(event, context, callback) {
-  const crcToken = event.queryStringParameters.crc_token;
+function getHandler(req, res) {
+  const crcToken = req.query.crc_token;
 
   if (crcToken) {
-    callback(null, {
-      statusCode: 200,
-      body: JSON.stringify({
-        response_token: createCrcResponseToken(crcToken)
-      })
+    res.status(200).send({
+      response_token: createCrcResponseToken(crcToken)
     });
   } else {
-    callback(null, {
-      statusCode: 400,
-      body: JSON.stringify({
-        message: "Error: crc_token missing from request."
-      })
+    res.status(400).send({
+      message: "Error: crc_token missing from request."
     });
   }
 }
 
-function postHandler(event, context, callback) {
-  const body = JSON.parse(event.body);
+function postHandler(req, res) {
+  const body = req.body;
 
   // If not a tweet event, we're not doing anything
   if (!body.tweet_create_events) {
-    callback(null, { statusCode: 200 });
+    res.status(200).send();
     return;
   }
 
@@ -58,6 +52,7 @@ function postHandler(event, context, callback) {
       })
       .then(joke => {
         // Reply to the tweet
+        console.log(`Joke: ${joke}`);
         request
           .post({
             url: `${TWITTER_API}/statuses/update.json`,
@@ -76,31 +71,28 @@ function postHandler(event, context, callback) {
           .then(response => {
             console.log("Tweeted");
             console.log(response);
-            callback(null, { statusCode: 200 });
+            res.status(200).send();
           })
           .catch(error => {
-            console.log(error);
-            callback(null, { statusCode: 200 });
+            console.log(error.message);
+            res.status(500).send();
           });
       });
   }
 }
 
-exports.handler = (event, context, callback) => {
+module.exports = (req, res) => {
   try {
-    switch (event.httpMethod) {
+    switch (req.method) {
       case "GET":
-        return getHandler(event, context, callback);
+        return getHandler(req, res);
       case "POST":
-        return postHandler(event, context, callback);
+        return postHandler(req, res);
       default:
-        callback(null, {
-          statusCode: 410,
-          body: JSON.stringify({ message: "Unsupported Request Method" })
-        });
+        return res.status(410).json({ message: "Unsupported Request Method" });
     }
   } catch (error) {
     console.log(error.message);
-    callback(error, { statusCode: 500 });
+    res.status(500).send();
   }
 };

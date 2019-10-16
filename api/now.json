@@ -1,0 +1,11 @@
+{
+  "name": "gimmedadjoke",
+  "version": 2,
+  "builds": [{ "src": "webhook.js", "use": "@now/node" }],
+  "env": {
+    "TWITTER_CONSUMER_KEY": "@gimmedadjoke-consumer-key",
+    "TWITTER_CONSUMER_SECRET": "@gimmedadjoke-consumer-secret",
+    "TWITTER_ACCESS_TOKEN": "@gimmedadjoke-access-token",
+    "TWITTER_ACCESS_TOKEN_SECRET": "@gimmedadjoke-access-token-secret"
+  }
+}
